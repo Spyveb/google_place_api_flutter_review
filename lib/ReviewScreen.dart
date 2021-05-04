@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_place_api/route_arguments.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_webservice/src/places.dart';
 
 class ReviewScreen extends StatefulWidget {
@@ -111,7 +112,7 @@ class ReviewView extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10, top: 5),
+                      margin: EdgeInsets.only(left: 10, top: 5,bottom: 5),
                       child: Text(
                         data.relativeTimeDescription,
                         maxLines: 10,
@@ -122,6 +123,21 @@ class ReviewView extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.normal),
                       ),
+                    ),
+                    RatingBar.builder(
+                      initialRating: data.rating.toDouble(),
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      ignoreGestures: true,
+                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        print(rating);
+                      },
                     ),
                   ],
                 ),

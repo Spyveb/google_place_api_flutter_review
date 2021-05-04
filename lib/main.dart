@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_google_place_api/ReviewScreen.dart';
@@ -110,7 +109,10 @@ class _MyAppState extends State<MyApp> {
       radius: 1000,
       strictbounds: false,
       types: [],
-      components: [Component(Component.country, "IN"),Component(Component.country, "UK")],
+      components: [
+        Component(Component.country, "IN"),
+        Component(Component.country, "UK")
+      ],
       overlayBorderRadius: BorderRadius.circular(20),
     );
     displayPrediction(p, homeScaffoldKey.currentState);
@@ -124,12 +126,17 @@ Future<Null> displayPrediction(Prediction p, ScaffoldState scaffold) async {
       apiHeaders: await GoogleApiHeaders().getHeaders(),
     );
     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
-    Navigator.push(
-        homeScaffoldKey.currentContext,
-        MaterialPageRoute(
-          builder: (context) => ReviewScreen(
-            routeArgument: new RouteArgument(placesDetailsResponse: detail),
-          ),
-        ));
+    if (detail.result.reviews.length > 0) {
+      Navigator.push(
+          homeScaffoldKey.currentContext,
+          MaterialPageRoute(
+            builder: (context) => ReviewScreen(
+              routeArgument: new RouteArgument(placesDetailsResponse: detail),
+            ),
+          ));
+    } else {
+      homeScaffoldKey.currentState
+          .showSnackBar(new SnackBar(content: new Text("No Review Found")));
+    }
   }
 }
